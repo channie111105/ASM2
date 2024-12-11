@@ -7,22 +7,10 @@ public class Main {
 
         System.out.print("Enter the number of students: ");
         int numStudents = scanner.nextInt();
-        scanner.nextLine();  // Consume newline
+        scanner.nextLine(); // Consume newline
 
-        // Nhập thông tin sinh viên
-        for (int i = 0; i < numStudents; i++) {
-            System.out.println("\nEnter details for student " + (i + 1));
-            System.out.print("Enter student ID: ");
-            String id = scanner.nextLine();
-            System.out.print("Enter student name: ");
-            String name = scanner.nextLine();
-            System.out.print("Enter student grade: ");
-            double grade = scanner.nextDouble();
-            scanner.nextLine();  // Consume newline
-
-            Student student = new Student(id, name, grade);
-            management.addStudent(student);
-        }
+        // Tạo ngẫu nhiên sinh viên
+        management.addRandomStudents(numStudents);
 
         while (true) {
             // Menu
@@ -37,7 +25,7 @@ public class Main {
 
             System.out.print("Choose an option: ");
             int choice = scanner.nextInt();
-            scanner.nextLine();  // Consume newline
+            scanner.nextLine(); // Consume newline
 
             switch (choice) {
                 case 1:
@@ -48,7 +36,7 @@ public class Main {
                     String name = scanner.nextLine();
                     System.out.print("Enter student grade: ");
                     double grade = scanner.nextDouble();
-                    scanner.nextLine();  // Consume newline
+                    scanner.nextLine(); // Consume newline
                     Student newStudent = new Student(id, name, grade);
                     management.addStudent(newStudent);
                     break;
