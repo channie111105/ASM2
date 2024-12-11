@@ -1,143 +1,51 @@
 import java.util.Arrays;
 
-public class StudentManagement {
-    private StudentStack students;
-
-    public StudentManagement() {
-        this.students = new StudentStack();
+public class StudentStack {
+    private Student[] stack;
+    private int top;
+    public StudentStack() {
+        stack = new Student[100];  // Kích thước tối đa cho stack là 100
+        top = -1;
     }
 
-    // Thêm một sinh viên
-    public void addStudent(Student student) {
-        students.push(student);
+    // Phương thức push để thêm sinh viên vào stack
+    public void push(Student student) {
+        if (top == stack.length - 1) {
+            // Tăng kích thước stack nếu đã đầy
+            stack = Arrays.copyOf(stack, stack.length * 2);
+        }
+        stack[++top] = student;
     }
-
-    // Xóa một sinh viên
-    public void removeStudent(String id) {
-        StudentStack tempStack = new StudentStack();
-        boolean found = false;
-
-        while (!students.isEmpty()) {
-            Student student = students.pop();
-            if (student.getId().equals(id)) {
-                found = true;
-            } else {
-                tempStack.push(student);
-            }
-        }
-
-        while (!tempStack.isEmpty()) {
-            students.push(tempStack.pop());
-        }
-
-        if (found) {
-            System.out.println("Student removed successfully.");
+    // Phương thức pop để lấy và loại bỏ sinh viên khỏi stack
+    public Student pop() {
+        if (top == -1) {
+            System.out.println("Stack is empty");
+            return null;
         } else {
-            System.out.println("Student with ID " + id + " not found.");
+            return stack[top--];
         }
     }
-
-    // Cập nhật thông tin sinh viên
-    public void updateStudent(String id, String name, double grade) {
-        StudentStack tempStack = new StudentStack();
-        boolean updated = false;
-
-        while (!students.isEmpty()) {
-            Student student = students.pop();
-            if (student.getId().equals(id)) {
-                student = new Student(id, name, grade);  // Cập nhật sinh viên
-                tempStack.push(student);
-                updated = true;
-            } else {
-                tempStack.push(student);
-            }
-        }
-
-        while (!tempStack.isEmpty()) {
-            students.push(tempStack.pop());
-        }
-
-        if (updated) {
-            System.out.println("Student updated successfully.");
+    // Phương thức peek (hoặc top) để xem sinh viên ở đầu stack mà không loại bỏ
+    public Student peek() {
+        if (top == -1) {
+            System.out.println("Stack is empty");
+            return null;
         } else {
-            System.out.println("Student with ID " + id + " not found.");
+            return stack[top];
         }
     }
-
-    // Tìm kiếm sinh viên theo ID
-    public Student searchStudent(String id) {
-        for (Student student : students.toArray()) {
-            if (student.getId().equals(id)) {
-                return student;
-            }
-        }
-        return null;  // Nếu không tìm thấy sinh viên
+    // Phương thức kiểm tra stack có rỗng không
+    public boolean isEmpty() {
+        return top == -1;
     }
-
-    // Hiển thị tất cả sinh viên
-    public void displayAllStudents() {
-        if (students.isEmpty()) {
-            System.out.println("No students available.");
-            return;
-        }
-
-        for (Student student : students.toArray()) {
-            System.out.println(student);
-        }
+    // Phương thức chuyển đổi stack thành mảng để duyệt qua
+    public Student[] toArray() {
+        Student[] studentsArray = new Student[top + 1];
+        System.arraycopy(stack, 0, studentsArray, 0, top + 1);
+        return studentsArray;
     }
-
-    // Sắp xếp sinh viên theo điểm giảm dần bằng Bubble Sort
-    public void sortStudentsByGrade() {
-        if (students.isEmpty()) {
-            System.out.println("Student list is empty.");
-            return;
-        }
-
-        // Chuyển stack thành mảng
-        Student[] studentArray = new Student[students.size()];
-        int index = 0;
-
-        // Lấy tất cả sinh viên ra khỏi stack và lưu vào mảng
-        while (!students.isEmpty()) {
-            studentArray[index++] = students.pop();
-        }
-
-        int n = studentArray.length;
-
-        // Bắt đầu đo thời gian
-        long startTime = System.nanoTime();
-
-        // Thuật toán Bubble Sort
-        for (int i = 0; i < n - 1; i++) {
-            for (int j = 0; j < n - i - 1; j++) {
-                if (studentArray[j].getGrade() < studentArray[j + 1].getGrade()) {
-                    // Hoán đổi hai sinh viên
-                    Student temp = studentArray[j];
-                    studentArray[j] = studentArray[j + 1];
-                    studentArray[j + 1] = temp;
-                }
-            }
-        }
-
-        // Kết thúc đo thời gian
-        long endTime = System.nanoTime();
-        long elapsedTime = endTime - startTime;
-
-        // In thời gian thực thi
-        System.out.println("Sorting execution time: " + elapsedTime + " nanoseconds");
-
-        // Đưa các sinh viên đã sắp xếp trở lại stack
-        for (Student student : studentArray) {
-            students.push(student);
-        }
+    // Phương thức lấy kích thước của stack
+    public int size() {
+        return top + 1;
     }
-
-
-
-
-
-
-
-
-
 }
